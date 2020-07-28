@@ -23,11 +23,12 @@ const styles = StyleSheet.create({
     },
 });
 
-export default ({ data: { from, content, isSameUser } }) => (
+export default ({ data: { message, from, content, isSameUser } }) => (
     <View style={styles.message}>
         <View style={styles.content}>
-            {!isSameUser && <Text style={styles.username}>{from}</Text>}
-            <Text>{content}</Text>
+            {/* {!isSameUser && <Text style={styles.username}>{from}</Text>}
+            <Text>{content}</Text> */}
+            <Text>{message}</Text>
         </View>
     </View>
 );

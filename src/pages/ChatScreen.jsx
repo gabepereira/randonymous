@@ -56,27 +56,31 @@ export default () => {
     const scrollRef = useRef(null);
 
     useEffect(() => {
-        data?.type === "message" &&
-            setMessages((messages) => [...messages, data]);
+        send({
+            action: "join",
+            data: {
+                channel: "teste",
+            },
+        });
+    }, []);
+
+    useEffect(() => {
+        if (!data.message) return;
+        setMessages((messages) => [...messages, data]);
     }, [data]);
 
     const handleSendMessage = () => {
         if (message.length) {
             send({
-                action: "sendmessage",
+                action: "message",
                 data: {
-                    type: "message",
-                    from: "teste",
-                    content: message,
+                    channel: "teste",
+                    message,
                 },
             });
             setMessage("");
         }
     };
-
-    // const handleAttachment = () => {
-    //     console.log("attach");
-    // };
 
     return (
         <View style={{ flex: 1 }}>
@@ -95,14 +99,15 @@ export default () => {
                             contentSize.maxHeight - 50
                     )
                 }
-                onContentSizeChange={(width, height) =>
+                onContentSizeChange={(_width, height) =>
                     isCloseToBottom && scrollRef.current.scrollTo({ y: height })
                 }
             >
-                {messages.map(({ from, content }, i) => (
+                {messages.map(({ message, from, content }, i) => (
                     <Message
                         key={i}
                         data={{
+                            message,
                             from,
                             content,
                             isSameUser: from === messages[i - 1]?.from,
@@ -118,13 +123,6 @@ export default () => {
                     onChangeText={(value) => setMessage(value)}
                     multiline
                 />
-                {/* <IconButton
-                    size={20}
-                    style={[styles.button, styles.actionElement]}
-                    icon="attachment"
-                    color={colors.white}
-                    onPress={handleAttachment}
-                /> */}
                 <IconButton
                     size={18}
                     style={[
